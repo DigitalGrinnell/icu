@@ -400,7 +400,11 @@ function icu_fetch_PIDs($namespace, $start, $end=NULL, $onlyAfter="2000-01-01T00
 
   $url = variable_get('islandora_solr_url', 'localhost:8080/solr');
   $fl = 'PID';
-  $request = 'http://' . $url . '/select?q=' . $q . $fq . '&fl=' . $fl . '&wt=php&rows=99999';
+  if (preg_match('/^http:\/\/\w.*/',$url) == 1) {
+    $request = $url . '/select?q=' . $q . $fq . '&fl=' . $fl . '&wt=php&rows=99999';
+  } else {
+    $request = 'http://' . $url . '/select?q=' . $q . $fq . '&fl=' . $fl . '&wt=php&rows=99999';
+  }
 
   // Build and execute the Solr query.
   // Solr query code from http://wiki.apache.org/solr/SolPHP
