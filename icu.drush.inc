@@ -190,14 +190,35 @@ function icu_drush_print_progress($label, $current=NULL, $range=NULL) {
  *   First DOMNode to compare.
  * @param $node2 DOMNode
  *   Second DOMNode to compare.
+ * @param $fullComparison boolean
+ *   If set, the comparison will also check that the nodes have the same parent
+ *     and the same attributes.
  */
-function icu_drush_nodes_match($node1, $node2) {
+function icu_drush_nodes_match($node1, $node2, $fullComparison=FALSE) {
 
   if ($node1->nodeName === $node2->nodeName) {
     if ($node1->nodeType === $node2->nodeType) {
       if ($node1->nodeValue === $node2->nodeValue) {
         $len = strlen(trim((string) $node1->nodeValue));
-        if ($len > 0) { return TRUE; }
+        if ($len > 0) {
+          if (!$fullComparison) { return TRUE; }
+
+          $sameAttr = TRUE;
+          if ($node1->hasAttributes() && $node2->hasAttributes()) {
+            $attr1 = $attr2 = array( );
+            if (count($node1->attributes) != count($node2->attributes)) { $sameAttr = FALSE; }
+            if ($sameAttr) {
+              foreach ($node1->attributes as $attr) { $attr1[] = $attr; }
+              foreach ($node2->attributes as $attr) { $attr2[] = $attr; }
+              for ($i=0; $i<count($attr1); $i++) {
+                if ($attr1[$i]->name != $attr2[$i]->name) { $sameAttr = FALSE; }
+                if ($attr1[$i]->value != $attr2[$i]->value) { $sameAttr = FALSE; }
+              }
+            }
+          }
+
+          if ($node1->parentNode === $node2->parentNode && $sameAttr) { return TRUE; }
+        }
       }
     }
   }
