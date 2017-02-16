@@ -1,0 +1,9 @@
+;$ID$
+name = Islandora Common Utilities (ICU)
+description = Drupal 7 module to provide routines common to multiple custom modules.
+package = ICG Modules
+core = 7.x
+files[] = icu.inc
+files[] = icu.drush.inc
+files[] = log_record.inc
+files[] = object_record.inc
