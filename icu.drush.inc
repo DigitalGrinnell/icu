@@ -119,7 +119,8 @@ function icu_drush_prep($pidSpec, &$last, &$pidn, &$range, &$namespace, $lastOp=
   }
 
   $start = date('H:i:s');
-  drush_log("Starting operation for PID '$pidSpec' and --repeat='$repeat' at $start.", 'status');
+  list($spec, $rest) = explode('-', $pidSpec);
+  drush_log("Starting operation for PID '$spec' and --repeat='$repeat' at $start.", 'status');
 
   if ($collection) { drush_log("PIDs will be selected only within --collection='$collection'.", 'status'); }
   if ($contentType) { drush_log("PIDs will be selected only where --contentType='$contentType'.", 'status'); }
